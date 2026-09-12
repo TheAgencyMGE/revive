@@ -1,0 +1,11 @@
+{
+  "id": "rust-msrv",
+  "name": "wordfreq",
+  "title": "Crate declares an unreachable minimum Rust version",
+  "language": "rust",
+  "blurb": "A word-frequency CLI whose Cargo.toml claims it needs a Rust version that does not exist on this machine. Cargo refuses to build before compiling a line.",
+  "expectedFailure": "cannot be built because it requires rustc 1.99.0",
+  "expectedRepair": "Lower the declared minimum supported Rust version",
+  "requiresNetwork": false,
+  "lastCommit": "2020-09-27T14:30:00Z"
+}

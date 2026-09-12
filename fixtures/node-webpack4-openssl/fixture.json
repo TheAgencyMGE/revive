@@ -1,0 +1,11 @@
+{
+  "id": "node-webpack4-openssl",
+  "name": "dashboard-bundle",
+  "title": "Webpack 4 crashes on the OpenSSL 3 provider",
+  "language": "node",
+  "blurb": "A 2019 dashboard bundled with webpack 4. Webpack 4 hashes with MD4, which OpenSSL 3 removed, so the build dies on Node 17 and newer with ERR_OSSL_EVP_UNSUPPORTED.",
+  "expectedFailure": "error:0308010C:digital envelope routines::unsupported",
+  "expectedRepair": "Re-enable the legacy OpenSSL provider for webpack 4",
+  "requiresNetwork": true,
+  "lastCommit": "2019-09-30T13:20:00Z"
+}

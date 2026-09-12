@@ -1,0 +1,13 @@
+[package]
+name = "wordfreq"
+version = "0.2.0"
+edition = "2018"
+rust-version = "1.99.0"
+description = "Count word frequencies in a text file"
+license = "MIT"
+
+[dependencies]
+
+[[bin]]
+name = "wordfreq"
+path = "src/main.rs"

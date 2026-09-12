@@ -1,0 +1,11 @@
+{
+  "id": "node-half-migration",
+  "name": "tiny-metrics",
+  "title": "Abandoned half-finished ESM migration",
+  "language": "node",
+  "blurb": "A 2019 statistics library whose last commit added \"type\": \"module\" to package.json and converted none of the CommonJS source. Every file now fails to load.",
+  "expectedFailure": "require is not defined in ES module scope",
+  "expectedRepair": "Remove the incorrect ES module declaration",
+  "requiresNetwork": false,
+  "lastCommit": "2019-06-14T10:22:00Z"
+}

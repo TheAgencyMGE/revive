@@ -1,0 +1,11 @@
+{
+  "id": "node-peer-conflict",
+  "name": "chart-widgets",
+  "title": "Peer dependency conflict blocks installation",
+  "language": "node",
+  "blurb": "A React dashboard widget pack abandoned mid-upgrade: react was bumped to 17 but react-dom was left at 16, which declares a hard peer dependency on React 16. npm 6 installed it silently; npm 7 made that a fatal ERESOLVE.",
+  "expectedFailure": "ERESOLVE unable to resolve dependency tree",
+  "expectedRepair": "Install with legacy peer dependency resolution",
+  "requiresNetwork": true,
+  "lastCommit": "2018-12-05T17:10:00Z"
+}

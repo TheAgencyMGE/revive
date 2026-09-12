@@ -1,0 +1,11 @@
+{
+  "id": "node-sass-legacy",
+  "name": "retro-ui",
+  "title": "node-sass has no binary for this Node version",
+  "language": "node",
+  "blurb": "A 2018 component library styled with SCSS. node-sass was deprecated in 2020 and ships no prebuilt binary for any recent Node, so installation fails or falls back to a source build.",
+  "expectedFailure": "node-sass / Missing binding",
+  "expectedRepair": "Replace node-sass with dart-sass",
+  "requiresNetwork": true,
+  "lastCommit": "2018-04-11T08:45:00Z"
+}

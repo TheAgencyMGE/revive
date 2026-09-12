@@ -1,0 +1,37 @@
+$primary: #2f6f4f;
+$radius: 4px;
+$spacing: 8px;
+
+@mixin button-base {
+  display: inline-block;
+  padding: $spacing ($spacing * 2);
+  border-radius: $radius;
+  border: 1px solid darken($primary, 10%);
+  cursor: pointer;
+}
+
+.btn {
+  @include button-base;
+  background: $primary;
+  color: #fff;
+
+  &:hover {
+    background: darken($primary, 6%);
+  }
+
+  &--ghost {
+    background: transparent;
+    color: $primary;
+  }
+}
+
+.card {
+  padding: $spacing * 2;
+  border-radius: $radius;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+
+  &__title {
+    margin: 0 0 $spacing;
+    font-weight: 600;
+  }
+}

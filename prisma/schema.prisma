@@ -1,0 +1,97 @@
+// Revive persistence layer.
+// SQLite by default so the product runs with zero external infrastructure.
+// Swapping in Postgres later is a provider change plus a migration — no app code changes.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Job {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Input
+  repoUrl   String
+  source    String   @default("github") // github | fixture
+  fixtureId String?
+  ref       String?
+
+  // Lifecycle
+  status    String   @default("queued") // queued|running|succeeded|partial|failed|cancelled
+  phase     String   @default("queued")
+  phaseIdx  Int      @default(0)
+  attempt   Int      @default(0)
+  maxAttempts Int    @default(4)
+  cancelRequested Boolean @default(false)
+
+  startedAt  DateTime?
+  finishedAt DateTime?
+  durationMs Int?
+
+  // Results (JSON blobs — engine owns the shapes, see src/engine/types.ts)
+  metadata        String? // RepoMetadata
+  detection       String? // DetectionResult
+  originalEnv     String? // EnvironmentSpec
+  finalEnv        String? // EnvironmentSpec
+  baseline        String? // VerificationResult
+  finalResult     String? // VerificationResult
+  diagnosis       String? // Diagnosis[]
+  repairs         String? // AppliedRepair[]
+  changedFiles    String? // ChangedFile[]
+  dependencyDiff  String? // DependencyChange[]
+  confidence      Int?
+  summary         String?
+  errorMessage    String?
+  errorCode       String?
+
+  // Artifacts (paths relative to the artifact root)
+  patchPath  String?
+  zipPath    String?
+  reportPath String?
+  diffText   String?
+
+  // Sandbox used for this run
+  sandboxMode String? // docker | restricted | analysis-only
+
+  parentJobId String? // set when this job is a retry of another
+
+  logs     LogLine[]
+  attempts Attempt[]
+
+  @@index([createdAt])
+  @@index([status])
+}
+
+model LogLine {
+  id      Int      @id @default(autoincrement())
+  jobId   String
+  job     Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  seq     Int
+  ts      DateTime @default(now())
+  phase   String
+  level   String   @default("info") // debug|info|warn|error|success|command
+  message String
+
+  @@index([jobId, seq])
+}
+
+model Attempt {
+  id         String   @id @default(cuid())
+  jobId      String
+  job        Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  number     Int
+  createdAt  DateTime @default(now())
+  strategy   String?
+  repairs    String? // AppliedRepair[]
+  result     String? // VerificationResult
+  outcome    String  @default("pending") // pending|improved|no-change|regressed|success|rolled-back
+  notes      String?
+
+  @@index([jobId, number])
+}

@@ -1,0 +1,16 @@
+# One-command container run:  docker compose up --build
+# Open http://localhost:3000. Data (database, runs, downloads) persists in the
+# `revive-data` volume. No credentials or external services are required.
+services:
+  revive:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - revive-data:/data
+    environment:
+      DATABASE_URL: "file:/data/revive.db"
+      REVIVE_DATA_DIR: "/data/revive"
+    restart: unless-stopped
+volumes:
+  revive-data:

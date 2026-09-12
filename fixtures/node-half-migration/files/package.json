@@ -1,0 +1,16 @@
+{
+  "name": "tiny-metrics",
+  "version": "0.4.2",
+  "description": "Tiny statistics helpers",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "node src/index.js --selftest",
+    "test": "node test/metrics.test.js",
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "license": "MIT"
+}

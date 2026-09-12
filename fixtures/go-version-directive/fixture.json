@@ -1,0 +1,11 @@
+{
+  "id": "go-version-directive",
+  "name": "shortlink",
+  "title": "Go module requires an unavailable toolchain",
+  "language": "go",
+  "blurb": "A URL shortener whose go.mod pins a Go release newer than the installed toolchain, so the build stops before compiling anything.",
+  "expectedFailure": "go.mod requires go >= 1.99",
+  "expectedRepair": "Lower the go directive to the installed toolchain",
+  "requiresNetwork": false,
+  "lastCommit": "2021-03-08T11:05:00Z"
+}

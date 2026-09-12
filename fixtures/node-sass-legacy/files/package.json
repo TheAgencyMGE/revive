@@ -1,0 +1,16 @@
+{
+  "name": "retro-ui",
+  "version": "1.3.0",
+  "description": "A small SCSS component library",
+  "scripts": {
+    "build": "node scripts/build-styles.js",
+    "test": "node test/build.test.js"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "devDependencies": {
+    "node-sass": "4.9.0"
+  },
+  "license": "MIT"
+}

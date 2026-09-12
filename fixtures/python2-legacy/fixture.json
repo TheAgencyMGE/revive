@@ -1,0 +1,11 @@
+{
+  "id": "python2-legacy",
+  "name": "logparse",
+  "title": "Python 2 source on a Python 3 interpreter",
+  "language": "python",
+  "blurb": "A 2013 log-parsing CLI written for Python 2.7. Python 2 reached end of life in 2020 and its syntax no longer parses.",
+  "expectedFailure": "Missing parentheses in call to 'print'",
+  "expectedRepair": "Migrate Python 2 syntax to Python 3",
+  "requiresNetwork": false,
+  "lastCommit": "2013-11-02T09:15:00Z"
+}

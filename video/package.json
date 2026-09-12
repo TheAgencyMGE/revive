@@ -1,0 +1,35 @@
+{
+  "name": "revive-demo-video",
+  "version": "1.0.0",
+  "description": "Remotion source for the Revive demo video",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@remotion/cli": "4.0.524",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.524",
+    "@remotion/tailwind-v4": "4.0.524",
+    "tailwindcss": "4.0.0"
+  },
+  "devDependencies": {
+    "@remotion/eslint-config-flat": "4.0.524",
+    "@types/react": "19.2.7",
+    "@types/web": "0.0.166",
+    "eslint": "9.19.0",
+    "prettier": "3.8.1",
+    "typescript": "5.9.3"
+  },
+  "scripts": {
+    "dev": "remotion studio",
+    "build": "remotion bundle",
+    "upgrade": "remotion upgrade",
+    "lint": "eslint src && tsc",
+    "render": "remotion render ReviveDemo ../docs/media/revive-demo.mp4 --codec=h264 --crf=20",
+    "render:gif": "remotion render ReviveDemo ../docs/media/revive-demo.gif --codec=gif --every-nth-frame=3 --scale=0.5",
+    "still": "remotion still ReviveDemo out/still.png --scale=0.5"
+  },
+  "sideEffects": [
+    "*.css"
+  ]
+}

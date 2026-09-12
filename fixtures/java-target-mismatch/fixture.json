@@ -1,0 +1,11 @@
+{
+  "id": "java-target-mismatch",
+  "name": "textutils",
+  "title": "Java compiler target no longer supported",
+  "language": "java",
+  "blurb": "A 2011 utility JAR targeting Java 6. Modern JDKs refuse to compile for release levels that old, and its Maven repository still points at plain HTTP.",
+  "expectedFailure": "release version 6 not supported",
+  "expectedRepair": "Raise the compiler target to the lowest level this JDK still accepts",
+  "requiresNetwork": false,
+  "lastCommit": "2011-08-19T16:40:00Z"
+}

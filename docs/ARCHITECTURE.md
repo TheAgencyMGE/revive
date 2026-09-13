@@ -86,7 +86,7 @@ Every repository is treated as hostile.
     non-root, `--rm`.
   - *restricted*: no inherited environment (allowlist + secret-pattern filter),
     HOME/TMP redirected into the workspace, timeouts with process-tree kill,
-    output cap, disk watchdog, POSIX rlimits. Toolchain *install locations*
+    output cap, disk watchdog, POSIX process-count and file-size rlimits. Memory is not capped in this mode (address-space limits break V8, the JVM and Go). Toolchain *install locations*
     (e.g. `RUSTUP_HOME`) pass through; credential stores (`CARGO_HOME`, `~/.npmrc`,
     `~/.m2/settings.xml`) do not. This is weaker than a container and the UI says so.
   - *analysis-only*: nothing executes.

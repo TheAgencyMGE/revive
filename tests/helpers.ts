@@ -1,13 +1,9 @@
 import path from 'node:path';
+import { onTestFailed } from 'vitest';
 import fs from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import type { JobSink } from '../src/engine/orchestrator';
-import type {
-  AppliedRepair,
-  LogLevel,
-  Phase,
-  VerificationResult,
-} from '../src/engine/types';
+import type { AppliedRepair, LogLevel, Phase, VerificationResult } from '../src/engine/types';
 
 /**
  * Test doubles and helpers.
@@ -64,6 +60,31 @@ export class MemoryJobSink implements JobSink {
   errors(): string[] {
     return this.logs.filter((l) => l.level === 'error').map((l) => l.message);
   }
+}
+
+/**
+ * When a test fails, print what each build step actually output. Integration
+ * failures on another OS are otherwise unexplainable from an assertion alone.
+ */
+export function dumpOnFailure(sink: MemoryJobSink): void {
+  onTestFailed(() => {
+    const report = (label: string, result: unknown) => {
+      const steps =
+        (result as { steps?: { step: string; status: string; command: string; output: string }[] })
+          ?.steps ?? [];
+      console.log(`\n===== ${label} =====`);
+      for (const s of steps) {
+        console.log(`--- ${s.step} [${s.status}] $ ${s.command}\n${String(s.output).slice(-2500)}`);
+      }
+    };
+    report('BASELINE', sink.state.baseline);
+    report('FINAL', sink.state.finalResult);
+    const diagnoses = (sink.state.diagnosis as { category: string; title: string }[]) ?? [];
+    console.log(
+      `\n===== DIAGNOSES =====\n${diagnoses.map((d) => `${d.category}: ${d.title}`).join('\n')}`,
+    );
+    console.log(`\n===== ERRORS =====\n${sink.errors().join('\n')}`);
+  });
 }
 
 const FIXTURE_BUILT = path.resolve(__dirname, '..', 'fixtures', '.built');

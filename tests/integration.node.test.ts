@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import { MemoryJobSink, fixtureExists, fixtureRepoPath, newJobId } from './helpers';
+import { MemoryJobSink, dumpOnFailure, fixtureExists, fixtureRepoPath, newJobId } from './helpers';
 
 /**
  * End-to-end integration: the ESM/CJS fixture.
@@ -35,6 +35,7 @@ describe('node-half-migration fixture', () => {
 
   it('detects, diagnoses, repairs and verifies end to end', async () => {
     const sink = new MemoryJobSink();
+    dumpOnFailure(sink);
     const controller = new AbortController();
 
     const result = await runJob({

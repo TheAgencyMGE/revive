@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import { MemoryJobSink, fixtureRepoPath, newJobId } from './helpers';
+import { MemoryJobSink, dumpOnFailure, fixtureRepoPath, newJobId } from './helpers';
 import { probeTool } from '../src/engine/toolchain';
 
 /**
@@ -32,6 +32,7 @@ afterAll(async () => {
 
 async function run(fixtureId: string) {
   const sink = new MemoryJobSink();
+  dumpOnFailure(sink);
   const controller = new AbortController();
   const result = await runJob({
     jobId: newJobId(),

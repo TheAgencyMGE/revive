@@ -184,7 +184,7 @@ Nothing is required. [`.env.example`](.env.example) lists optional limits: repos
 
 ## Limitations
 
-- Restricted mode cannot cap CPU or memory on Windows, or isolate the network on any OS. Use Docker for untrusted code you care about.
+- Restricted mode does not cap CPU or memory, or isolate the network. Use Docker for untrusted code you care about.
 - Revive uses runtimes already installed (or available via nvm, pyenv, SDKMAN or rustup); it does not download historical runtimes. When the original runtime is missing, the report says so.
 - Only public github.com repositories are accepted.
 - The Python 2 → 3 repair is syntax-only by design; semantic changes are left for a human.

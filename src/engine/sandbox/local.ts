@@ -40,14 +40,18 @@ export class LocalSandbox implements Sandbox {
       mode: 'restricted',
       canExecute: true,
       cpuLimited: false,
-      memoryLimited: posix,
+      // Address-space rlimits (ulimit -v) are deliberately NOT used: V8, the
+      // JVM and the Go runtime all reserve large virtual ranges at startup and
+      // abort under them, which would make Node, Java and Go projects fail
+      // before running a line of their own code.
+      memoryLimited: false,
       diskLimited: true,
       networkControlled: false,
       filesystemIsolated: false,
       processLimited: posix,
       reason: opts.reason,
       detail: posix
-        ? 'Restricted local execution: scrubbed environment, rlimits (memory/processes/file size), timeouts, process-tree kill and a disk watchdog. Weaker isolation than a container — repository code runs as the current OS user.'
+        ? 'Restricted local execution: scrubbed environment, process-count and file-size rlimits, timeouts, process-tree kill and a disk watchdog. Memory is not capped and the network is not isolated. Weaker isolation than a container — repository code runs as the current OS user.'
         : 'Restricted local execution: scrubbed environment, redirected HOME/TMP, timeouts, process-tree kill and a disk watchdog. Windows cannot apply POSIX rlimits, so CPU/memory are bounded by timeout and watchdog only. Install Docker Desktop for full container isolation.',
     };
   }
@@ -67,12 +71,12 @@ export class LocalSandbox implements Sandbox {
     const started = Date.now();
 
     // On POSIX, wrap the command in ulimits. These are inherited by every
-    // descendant process, so a fork bomb or a runaway compiler hits a hard wall.
-    //   -v : virtual memory KB   -u : max user processes
-    //   -f : max file size (blocks)   -c : no core dumps
+    // descendant process, so a fork bomb or runaway output hits a hard wall.
+    //   -u : max user processes   -f : max file size (blocks)   -c : no core dumps
+    // No -v (address space): modern runtimes reserve far more virtual memory
+    // than they use and abort under it. Use Docker mode for real memory caps.
     const posixPrologue = [
       'ulimit -c 0',
-      'ulimit -v 4194304 2>/dev/null || true',
       'ulimit -u 512 2>/dev/null || true',
       'ulimit -f 4194304 2>/dev/null || true',
     ].join('; ');
@@ -82,7 +86,9 @@ export class LocalSandbox implements Sandbox {
       : '/bin/bash';
     const args = config.isWindows
       ? ['/d', '/s', '/c', command]
-      : ['-lc', `${posixPrologue}; ${command}`];
+      : // Non-login shell: a login shell re-reads /etc/profile and resets PATH,
+        // discarding the scrubbed environment's toolchain paths.
+        ['-c', `${posixPrologue}; ${command}`];
 
     const child = spawn(shell, args, {
       cwd: options.cwd,
